@@ -3,6 +3,7 @@ import requests
 import psycopg2
 import os
 import schedule
+from .crawler import Flat
 
 api = 'https://api.telegram.org/'
 bot_token = os.environ['FLATS_TOKEN']
@@ -11,6 +12,15 @@ bot_chatID = os.environ['FLATS_CHAT_ID']
 def send_message(chat_id, text):
     parameters = {'chat_id': chat_id, 'text': text, 'parse_mode':'markdown'}
     message = requests.post(f"{api}bot{bot_token}/sendMessage", data=parameters)
+
+def fail_criteria(flat: Flat):
+    if flat.price and int(flat.price[:-2].replace(" ", "")) > 3000:
+        return True
+    if "zwierz" in flat.description:
+        return True
+    if "2022" in flat.description:
+        return True
+    return False
 
 def check_results_send_mess():
     print("Checking new flats...")
@@ -26,6 +36,8 @@ def check_results_send_mess():
     flats = OtoDom()
 
     for flat in flats:
+        if fail_criteria(flat):
+            continue
         flat_exists = flats_db.execute(f"SELECT link FROM flats WHERE link='{flat.link}'")
         if len(flats_db.fetchall()) != 1:
             mess_content = flat.print()

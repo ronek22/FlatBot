@@ -26,6 +26,9 @@ class Flat:
         *Rooms:* {self.rooms}
         *Floor:* {self.floor}
         *Metrage:* {self.metrage}
+        *Rent costs:* {self.additional_costs}
+        =====================================
+        *Description:" {self.description}
         '''
 
     def __repr__(self) -> str:
