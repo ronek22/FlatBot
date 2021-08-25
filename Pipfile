@@ -8,6 +8,7 @@ requests = "*"
 beautifulsoup4 = "*"
 psycopg2 = "*"
 schedule = "*"
+loguru = "*"
 
 [dev-packages]
 

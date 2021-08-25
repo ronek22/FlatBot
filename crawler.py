@@ -2,7 +2,6 @@ from typing import List
 from constants import OtoDomConfig, Page
 import requests
 from bs4 import BeautifulSoup as bs
-from pprint import pprint
 from abc import ABC, abstractmethod
 
 class Flat:

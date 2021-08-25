@@ -1,9 +1,9 @@
-from crawler import OtoDom
+from crawler import Flat, OtoDom
 import requests
 import psycopg2
 import os
 import schedule
-from .crawler import Flat
+from loguru import logger
 
 api = 'https://api.telegram.org/'
 bot_token = os.environ['FLATS_TOKEN']
@@ -13,13 +13,17 @@ def send_message(chat_id, text):
     parameters = {'chat_id': chat_id, 'text': text, 'parse_mode':'markdown'}
     message = requests.post(f"{api}bot{bot_token}/sendMessage", data=parameters)
 
-def fail_criteria(flat: Flat):
+def fail_criteria(flat: Flat) -> bool:
     if flat.price and int(flat.price[:-2].replace(" ", "")) > 3000:
+        logger.info("Price is too high", flat.price)
         return True
     if "zwierz" in flat.description:
+        logger.info("Zwierzeta in description", flat.link)
         return True
     if "2022" in flat.description:
+        logger.info("Too short rent time", flat.link)
         return True
+    logger.success("Awesome offer", flat.link)
     return False
 
 def check_results_send_mess():
