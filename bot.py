@@ -44,6 +44,7 @@ def check_results_send_mess():
             continue
         flat_exists = flats_db.execute(f"SELECT link FROM flats WHERE link='{flat.link}'")
         if len(flats_db.fetchall()) != 1:
+            logger.success(f"Add flat: {flat.link}")
             mess_content = flat.print()
             send_message(bot_chatID, mess_content)
             flats_db.execute(f"INSERT INTO flats (link) VALUES ('{flat.link}')")
