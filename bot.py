@@ -15,15 +15,15 @@ def send_message(chat_id, text):
 
 def fail_criteria(flat: Flat) -> bool:
     if flat.price and int(flat.price[:-2].replace(" ", "")) > 3000:
-        logger.info("Price is too high", flat.price)
+        logger.info(f"Price is too high: {flat.price}")
         return True
     if "zwierz" in flat.description:
-        logger.info("Zwierzeta in description", flat.link)
+        logger.info(f"Zwierzeta in description: {flat.title[:8]}...")
         return True
     if "2022" in flat.description:
-        logger.info("Too short rent time", flat.link)
+        logger.info(f"Too short rent time {flat.title[:8]}...")
         return True
-    logger.success("Awesome offer", flat.link)
+    logger.success(f"Awesome offer: {flat.link}")
     return False
 
 def check_results_send_mess():
